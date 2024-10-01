@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useModal } from '../Common/ModalContext';
-import { useAuth } from '../../components/Authorization/useAuth';
+import { useAuth } from '../../services/useAuth';
+import DefaultReviewerPhoto from '../../assets/imeges/defoltAvatar.webp';
+import { toast } from 'react-toastify';
+import { db } from '../../services/firebase';
+import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import {
   IconHeart,
   IconsBooks,
@@ -35,10 +39,6 @@ import {
   ReviewComment,
   BookTrialButton,
 } from './TeacherCard.styles';
-import DefaultReviewerPhoto from '../../assets/imeges/defoltAvatar.webp';
-import { toast } from 'react-toastify';
-import { db } from '../../services/firebase';
-import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 interface Teacher {
   name: string;

@@ -9,11 +9,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/ToastStyles.css';
 
-import { HomePage } from './pages/HomePage/HomePage.tsx';
-import { Header } from './components/Header/Header.tsx';
-import { TeachersPage } from './pages/TeachersPage/TeachersPage.tsx';
-import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage.tsx';
-import { AuthProvider } from './components/Authorization/useAuth';
+import { HomePage } from './pages/HomePage/HomePage';
+import { Header } from './components/Header/Header';
+import { TeachersPage } from './pages/TeachersPage/TeachersPage';
+import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage';
+import { AuthProvider } from './services/useAuth';
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
