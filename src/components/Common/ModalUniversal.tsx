@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Iconsvg } from './Icons';
+import { ToastContainer } from 'react-toastify';
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -79,13 +80,16 @@ export const ModalUniversal: React.FC<ModalProps> = ({ onClose, children }) => {
   }, [onClose]);
 
   return (
-    <ModalBackdrop onClick={onClose}>
-      <ModalContainer onClick={e => e.stopPropagation()}>
-        <ButtonClose onClick={onClose}>
-          <StyledIcon width={32} height={32} iconName="close" />
-        </ButtonClose>
-        {children}
-      </ModalContainer>
-    </ModalBackdrop>
+    <>
+      <ModalBackdrop onClick={onClose}>
+        <ModalContainer onClick={e => e.stopPropagation()}>
+          <ButtonClose onClick={onClose}>
+            <StyledIcon width={32} height={32} iconName="close" />
+          </ButtonClose>
+          {children}
+        </ModalContainer>
+      </ModalBackdrop>
+      <ToastContainer />
+    </>
   );
 };

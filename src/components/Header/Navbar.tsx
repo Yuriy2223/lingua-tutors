@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../services/authContext';
 
 const NavbarContainer = styled.nav`
   display: flex;
@@ -33,11 +34,13 @@ const NavbarLink = styled(NavLink)`
 `;
 
 export const Navbar: React.FC = () => {
+  const { user } = useAuth();
+
   return (
     <NavbarContainer>
       <NavbarLink to="/">Home</NavbarLink>
       <NavbarLink to="/teachers">Teachers</NavbarLink>
-      <NavbarLink to="/favorites">Favorites</NavbarLink>
+      {user && <NavbarLink to="/favorites">Favorites</NavbarLink>}{' '}
     </NavbarContainer>
   );
 };

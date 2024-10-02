@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ModalUniversal } from '../Common/ModalUniversal';
 import {
@@ -30,17 +30,14 @@ export const ModalLogout: React.FC<ModalLogoutProps> = ({ onClose }) => {
   }, [onClose]);
 
   return (
-    <>
-      <ModalUniversal onClose={onClose}>
-        <ModalFormLogaut>
-          <ModalTitle>Log Out</ModalTitle>
-          <ModalText>Are you sure you want to log out?</ModalText>
-          <ModalButton type="button" onClick={handleLogout}>
-            Yes, Log Out
-          </ModalButton>
-        </ModalFormLogaut>
-      </ModalUniversal>
-      <ToastContainer />
-    </>
+    <ModalUniversal onClose={onClose}>
+      <ModalFormLogaut>
+        <ModalTitle>Log Out</ModalTitle>
+        <ModalText>Are you sure you want to log out?</ModalText>
+        <ModalButton type="button" onClick={handleLogout}>
+          Yes, Log Out
+        </ModalButton>
+      </ModalFormLogaut>
+    </ModalUniversal>
   );
 };

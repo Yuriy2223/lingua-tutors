@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { registerSchema } from '../Common/validationSchemas';
 import { ModalUniversal } from '../Common/ModalUniversal';
@@ -19,13 +19,12 @@ import {
   ModalPasswordButton,
 } from './Modal.styles';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { auth } from '../../services/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
+import { useAuth } from '../../services/authContext';
 
 interface ModalRegisterProps {
   onClose: () => void;
 }
-
 interface FormData {
   name: string;
   email: string;
@@ -34,7 +33,7 @@ interface FormData {
 
 export const ModalRegister: React.FC<ModalRegisterProps> = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const { register: registerUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -49,26 +48,31 @@ export const ModalRegister: React.FC<ModalRegisterProps> = ({ onClose }) => {
   const onSubmit = useCallback(
     async (data: FormData) => {
       try {
-        await createUserWithEmailAndPassword(auth, data.email, data.password);
+        await registerUser(data.email, data.password);
         reset();
         toast.success('Registration successful!');
-        onClose();
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } catch (error) {
-        toast.error('Registration failed. Please try again.');
-        console.error('Registration error:', error);
+        const firebaseError = error as FirebaseError;
+        if (firebaseError.code === 'auth/email-already-in-use') {
+          toast.error('This email is already in use.');
+        } else {
+          toast.error('Registration failed. Please try again.');
+        }
+        console.error('Registration error:', firebaseError);
       }
     },
-    [onClose, reset]
+    [onClose, reset, registerUser]
   );
 
   const handleBlur = (fieldName: keyof FormData) => {
     trigger(fieldName);
   };
-
   const handleFocus = (fieldName: keyof FormData) => {
     clearErrors(fieldName);
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(prev => !prev);
   };
@@ -130,7 +134,6 @@ export const ModalRegister: React.FC<ModalRegisterProps> = ({ onClose }) => {
           <ModalButton type="submit">Sign Up</ModalButton>
         </ModalForm>
       </ModalUniversal>
-      <ToastContainer />
     </>
   );
 };

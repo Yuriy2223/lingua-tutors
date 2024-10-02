@@ -18,13 +18,11 @@ import { AuthProvider } from './services/useAuth';
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [themeType, setThemeType] = useState<ThemeType>('light');
-  console.log(import.meta.env.VITE_YOUR_API_KEY);
   useEffect(() => {
     const loadData = async () => {
       await new Promise(resolve => setTimeout(resolve, 500));
       setLoading(false);
     };
-    console.log(import.meta.env.VITE_YOUR_API_KEY);
     loadData();
   }, []);
 
@@ -50,7 +48,6 @@ export const App: React.FC = () => {
             </Routes>
           </Suspense>
           <ToastContainer
-            // position="top-right"
             position="top-center"
             autoClose={7000}
             hideProgressBar={false}

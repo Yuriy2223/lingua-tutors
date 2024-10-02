@@ -1,49 +1,7 @@
 {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null",
-    "teachers": {
-      ".read": "true",
-      ".write": "auth != null",
-      "$teacherId": {
-        ".validate": "newData.child('name').isString() && newData.child('surname').isString() && newData.child('languages').isString() && newData.child('levels').isString() && newData.child('rating').isNumber() && newData.child('price_per_hour').isNumber() && newData.child('avatar_url').isString() && newData.child('lesson_info').isString() && newData.child('conditions').isString() && newData.child('experience').isString()",
-        "name": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-        "surname": {
-          ".validate": "newData.isString() && newData.val().length > 0"
-        },
-        "languages": {
-          ".validate": "newData.isString()"
-        },
-        "levels": {
-          ".validate": "newData.isString()"
-        },
-        "rating": {
-          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 5"
-        },
-        "price_per_hour": {
-          ".validate": "newData.isNumber() && newData.val() >= 0"
-        },
-        "avatar_url": {
-          ".validate": "newData.isString()"
-        },
-        "lesson_info": {
-          ".validate": "newData.isString()"
-        },
-        "conditions": {
-          ".validate": "newData.isString()"
-        },
-        "experience": {
-          ".validate": "newData.isString()"
-        }
-      }
-    },
-    "users": {
-      "$userId": {
-        ".read": "$userId === auth.uid",
-        ".write": "$userId === auth.uid"
-      }
-    }
+    ".read": false,
+    ".write": false
   }
 }

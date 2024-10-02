@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useModal } from '../Common/ModalContext';
-import { useAuth } from '../../services/useAuth';
+import { useAuth } from '../../services/authContext';
 import DefaultReviewerPhoto from '../../assets/imeges/defoltAvatar.webp';
 import { toast } from 'react-toastify';
 import { db } from '../../services/firebase';
@@ -240,3 +240,4 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     </TeacherCardContainer>
   );
 };
+

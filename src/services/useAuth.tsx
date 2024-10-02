@@ -1,41 +1,18 @@
-import {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  ReactNode,
-} from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { auth } from './firebase';
 import {
   User,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth';
-
-// Інтерфейс для контексту аутентифікації
-interface AuthContextProps {
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-}
+import { AuthContext, AuthContextProps } from './authContext';
 
 // Інтерфейс для пропсів провайдера аутентифікації
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-// Створення контексту для аутентифікації
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
-
-// Хук для доступу до контексту
-export const useAuth = (): AuthContextProps => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
 
 // Провайдер для обгортання компонентів
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -59,11 +36,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await signOut(auth);
   };
 
+  // Функція для реєстрації
+  const register = async (email: string, password: string) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+  };
+
   // Значення, яке передаємо через контекст
   const value: AuthContextProps = {
     user,
     login,
     logout,
+    register,
   };
 
   // Рендеримо провайдер контексту з переданими значеннями

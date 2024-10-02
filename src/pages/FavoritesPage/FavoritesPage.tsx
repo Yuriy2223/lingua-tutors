@@ -9,7 +9,7 @@ import {
 import { teachersData } from '../../components/TeacherCard/teachersData';
 import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../services/useAuth';
+import { useAuth } from '../../services/authContext';
 import { db } from '../../services/firebase';
 import {
   collection,
