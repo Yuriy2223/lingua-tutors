@@ -1,60 +1,57 @@
-LearnLingo - Online Language Learning Platform
+ LearnLingo - Online Language Learning Platform
 
-Description of the project
+ Project Description
 
-LearnLingo is a web application that allows users to find and interact with teachers offering online language learning services. Users can view the list of teachers, filter them by language, level of knowledge and price, as well as add their favorite teachers to the list of favorites. The application also supports the authorization functionality, which allows you to save your favorite teachers, book trial lessons, and much more.
+LearnLingo is a web application that allows users to find and interact with teachers offering online language learning services. Users can browse a list of teachers, filter them by language, skill level, and price, and add their favorite teachers to a favorites list. The application also supports authentication functionality, enabling users to save their favorite teachers, book trial lessons, and much more.
 
-Main pages:
+ Main Pages
 
-- Home: contains company information and a call to action to get started.
-- Teachers: a list of teachers with the possibility of filtering by language, level of knowledge and price per lesson.
-- Favorites: a private page that displays teachers added by the user to favorites.
+- Home: contains information about the company and a call to action to get started.
+- Teachers: a list of teachers with filtering options by teaching language, skill level, and price per lesson.
+- Favorites: a private page displaying teachers that the user has added to favorites.
 
-Basic technologies
+ Main Technologies
 
 - React: for building the user interface.
-- TypeScript: for typing code.
+- TypeScript: for type checking the code.
 - Styled-components: for creating styled components in React.
-- Firebase Authentication: for user authorization (registration, login, logout).
-- Firebase Realtime Database: to save the data of teachers and selected users.
+- Firebase Authentication: for user authentication (registration, login, logout).
+- Firebase Realtime Database: for storing teacher data and user favorites.
 - React Router: for routing between pages.
 - react-hook-form and yup: for creating and validating forms.
-- localStorage: for temporary storage of data about selected teachers.
 
-Model
+ Design Mockup
 
-The project was created according to the layout, which provides for an adaptive design from 320px to 1440px. The layout includes a main page with a list of company benefits, a faculty page with filters, and a featured faculty page.
+[Link to the design mockup](https://www.figma.com/file/dewf5jVviSTuWMMyU3d8Mc/%D0%9F%D0%B5%D1%82-%D0%BF%D1%80%D0%BE%Dє%D0%BA%D1%82-%D0%B4%D0%BB%D1%8F-%D0%9A%D0%A6?type=design&node-id=0-1&mode=design&t=jCmjSs9PeOjObYSc-0)
 
-Technical task
+The project was created according to the mockup, which does not include responsive design (1440px). The mockup features a homepage with a list of the company's advantages, a teacher page with filters, and a favorites page for selected teachers.
 
-1. Authorization:
+ Technical Requirements
 
-- User can register or login using Firebase Authentication.
-- After authorization, the user can add teachers to the favorites, book trial classes.
+1. Authentication:
+   - Users can register or log into the system using Firebase Authentication.
+   - After authentication, users can add teachers to their favorites and book trial lessons.
 
-2. List of teachers:
+2. Teacher List:
+   - Teacher data is stored in Firebase Realtime Database.
+   - Users can filter teachers by the teaching language, student skill level, and price per lesson.
 
-- Teacher data is stored in Firebase Realtime Database.
-- Users can filter teachers by language of instruction, level of knowledge of students and price per lesson.
+3. Favorites:
+   - Users can add teachers to their favorites by clicking a heart-shaped button.
+   - All selected teachers are stored in Firebase, and the information is retained after refreshing the page.
 
-3. Chosen:
+4. Modal Windows:
+   - Modal windows for registration and lesson booking have field validation using `react-hook-form` and `yup`.
+   - Modal windows can be closed by clicking on the backdrop, the close button, or pressing the `Esc` key.
 
-- Users can add teachers to favorites by clicking on the heart-shaped button.
-- All selected teachers are stored in `localStorage` or Firebase and after refreshing the page the information is saved.
+ Completion Criteria
 
-4. Modal windows:
-
-- Modal windows for registering and booking classes have field validation using `react-hook-form` and `yup`.
-- Modal windows are closed when clicking on the backdrop, the cross or the `Esc' key.
-
-Performance criteria
-
--  design 1440px.
+- The design is set for 1440px.
 - No errors in the browser console.
-- The project must be deployed on GitHub Pages, Netlify or other hosting.
-- The code is clean, formatted, without unnecessary comments.
-- The repository must contain the `README.md` file.
+- The project should be deployed on GitHub Pages, Netlify, or another hosting service.
+- Code is clean, formatted, and free of unnecessary comments.
+- The repository must include a `README.md` file.
 
-Deploy
+ Deployment
 
-The project is deployed at the link: [LearnLingo](https://???????.com)
+The project is deployed at the following link: [LearnLingo] (https://lingua-tutors.vercel.app/)
