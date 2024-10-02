@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { db } from '../../services/firebase';
+import { ref, get } from 'firebase/database';
+import { useAuth } from '../../services/authContext';
 import {
   FilterContainer,
   FilterLabel,
@@ -10,10 +13,11 @@ import {
   TeachersPageContainer,
   NoTeachersMessage,
 } from './TeachersPage.styled';
-import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
-import { db } from '../../services/firebase';
-import { ref, get } from 'firebase/database';
-import { useAuth } from '../../services/authContext';
+const TeacherCard = React.lazy(() =>
+  import('../../components/TeacherCard/TeacherCard').then(module => ({
+    default: module.TeacherCard,
+  }))
+);
 
 interface Review {
   reviewer_name: string;
