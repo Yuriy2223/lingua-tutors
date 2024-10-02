@@ -10,12 +10,13 @@ import {
   TeachersPageContainer,
   NoTeachersMessage,
 } from './TeachersPage.styled';
-import { teachersData } from '../../components/TeacherCard/teachersData';
+// import { teachersData } from '../../components/TeacherCard/teachersData';
 import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../services/authContext';
 import { db } from '../../services/firebase';
 import { doc, setDoc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore'; //** */
 
 export const TeachersPage: React.FC = () => {
   const { user } = useAuth();
@@ -23,14 +24,52 @@ export const TeachersPage: React.FC = () => {
   const [levelFilter, setLevelFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
+
+  interface Teacher {
+    id: string;
+    name: string;
+    surname: string;
+    languages: string[];
+    levels: string[];
+    rating: number;
+    reviews: {
+      reviewer_name: string;
+      reviewer_rating: number;
+      comment: string;
+    }[];
+    price_per_hour: number;
+    lessons_done: number;
+    avatar_url: string;
+    lesson_info: string;
+    conditions: string[];
+    experience: string;
+  }
+
+  const [teachersData, setTeachersData] = useState<Teacher[]>([]);
+
   const [favoriteTeachers, setFavoriteTeachers] = useState<string[]>(() => {
     const savedFavorites = localStorage.getItem('favoriteTeachers');
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem('favoriteTeachers', JSON.stringify(favoriteTeachers));
-  }, [favoriteTeachers]);
+    const fetchTeachers = async () => {
+      try {
+        const teachersCollection = collection(db, 'teachers');
+        const teacherSnapshot = await getDocs(teachersCollection);
+        const teachersList = teacherSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Teacher, 'id'>),
+        })) as Teacher[];
+        setTeachersData(teachersList);
+      } catch (error) {
+        console.error('Error fetching teachers: ', error);
+        toast.error('Error fetching teachers.');
+      }
+    };
+
+    fetchTeachers();
+  }, []);
 
   const filteredTeachers = teachersData.filter(teacher => {
     const languageMatch =

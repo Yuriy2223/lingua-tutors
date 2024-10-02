@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { ModalContext, ModalType } from './ModalContext';
-import { ModalLogin } from '../Modals/ModalLogin';
-import { ModalRegister } from '../Modals/ModalRegistration';
-import { ModalLogout } from '../Modals/ModalLogout';
-import { ModalBooking } from '../Modals/ModalBooking';
+import { ModalContext, ModalType } from '../components/Common/ModalContext';
+import { ModalLogin } from '../components/Modals/ModalLogin';
+import { ModalRegister } from '../components/Modals/ModalRegistration';
+import { ModalLogout } from '../components/Modals/ModalLogout';
+import { ModalBooking } from '../components/Modals/ModalBooking';
 
 interface ModalProps {
   avatar_url?: string;
   name?: string;
   surname?: string;
+  id?: string;
 }
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({

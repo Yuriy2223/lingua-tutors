@@ -41,6 +41,7 @@ import {
 } from './TeacherCard.styles';
 
 interface Teacher {
+  id: string;
   name: string;
   surname: string;
   languages: string[];
@@ -77,7 +78,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded(prev => !prev);
   };
 
   const handleBookTrial = () => {
@@ -85,6 +86,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
       avatar_url: teacher.avatar_url,
       name: teacher.name,
       surname: teacher.surname,
+      id: teacher.id,
     });
     setIsExpanded(false);
   };
@@ -98,7 +100,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     onToggleFavorite();
 
     const favoritesRef = collection(db, 'users', user.uid, 'favorites');
-    const teacherDocRef = doc(favoritesRef, teacher.name);
+    const teacherDocRef = doc(favoritesRef, teacher.id);
     try {
       if (isFavorite) {
         await deleteDoc(teacherDocRef);
@@ -107,6 +109,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
         await setDoc(teacherDocRef, {
           name: teacher.name,
           surname: teacher.surname,
+          id: teacher.id,
         });
         toast.success(`${teacher.name} added to favorites.`);
       }
@@ -240,4 +243,3 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
     </TeacherCardContainer>
   );
 };
-

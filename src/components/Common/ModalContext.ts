@@ -11,6 +11,7 @@ interface ModalProps {
   avatar_url?: string;
   name?: string;
   surname?: string;
+  id?: string;
 }
 // Інтерфейс контексту
 export interface ModalContextType {

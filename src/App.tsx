@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Suspense, useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { themes, ThemeType } from './styles/Theme.ts';
-import { ModalProvider } from './components/Common/ModalProvder.tsx';
+import { ModalProvider } from './services/ModalProvder.tsx';
 import { Loader } from './components/Common/Loader';
 import { NotFoundPage } from './pages/NotFoundPage.tsx';
 import { ToastContainer } from 'react-toastify';
