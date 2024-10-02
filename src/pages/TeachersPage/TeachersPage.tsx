@@ -13,11 +13,7 @@ import {
   TeachersPageContainer,
   NoTeachersMessage,
 } from './TeachersPage.styled';
-const TeacherCard = React.lazy(() =>
-  import('../../components/TeacherCard/TeacherCard').then(module => ({
-    default: module.TeacherCard,
-  }))
-);
+import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
 
 interface Review {
   reviewer_name: string;
