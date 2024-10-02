@@ -71,8 +71,6 @@ export const FavoritesPage: React.FC = () => {
           }));
 
           setFavoriteTeachers(favoritesList);
-        } else {
-          console.log('No favorite teachers found.');
         }
       } catch (error) {
         console.error('Error fetching favorite teachers:', error);

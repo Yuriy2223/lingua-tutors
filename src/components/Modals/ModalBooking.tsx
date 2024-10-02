@@ -66,7 +66,6 @@ export const ModalBooking: React.FC<ModalBookingProps> = ({
   const onSubmit = useCallback(
     async (data: BookingFormData) => {
       try {
-        console.log('Form Data:', data);
         reset();
         toast.success(
           <div>

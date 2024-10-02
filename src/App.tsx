@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { themes, ThemeType } from './styles/Theme.ts';
 import { ModalProvider } from './services/ModalProvder.tsx';
@@ -8,12 +8,31 @@ import { NotFoundPage } from './pages/NotFoundPage.tsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/ToastStyles.css';
-
-import { HomePage } from './pages/HomePage/HomePage';
-import { Header } from './components/Header/Header';
-import { TeachersPage } from './pages/TeachersPage/TeachersPage';
-import { FavoritesPage } from './pages/FavoritesPage/FavoritesPage';
 import { AuthProvider } from './services/useAuth';
+
+const HomePage = React.lazy(() =>
+  import('./pages/HomePage/HomePage').then(module => ({
+    default: module.HomePage,
+  }))
+);
+
+const Header = React.lazy(() =>
+  import('./components/Header/Header').then(module => ({
+    default: module.Header,
+  }))
+);
+
+const TeachersPage = React.lazy(() =>
+  import('./pages/TeachersPage/TeachersPage').then(module => ({
+    default: module.TeachersPage,
+  }))
+);
+
+const FavoritesPage = React.lazy(() =>
+  import('./pages/FavoritesPage/FavoritesPage').then(module => ({
+    default: module.FavoritesPage,
+  }))
+);
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);

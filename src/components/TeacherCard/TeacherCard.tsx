@@ -93,8 +93,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   };
 
   const handleToggleFavorite = async () => {
-    console.log('User status:', user); 
-    if (!user) {
+       if (!user) {
       toast.info('This functionality is only available to authorized users.');
       return;
     }
