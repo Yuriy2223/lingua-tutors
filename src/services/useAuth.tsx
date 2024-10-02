@@ -9,7 +9,6 @@ import {
 } from 'firebase/auth';
 import { AuthContext, AuthContextProps } from './authContext';
 
-// Інтерфейс для пропсів провайдера аутентифікації
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -17,12 +16,19 @@ interface AuthProviderProps {
 // Провайдер для обгортання компонентів
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   // Відстежуємо стан аутентифікації користувача
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
+
+      // Якщо користувач вийшов, очищуємо улюблені
+      if (!currentUser) {
+        setFavorites([]);
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -34,6 +40,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Функція для виходу
   const logout = async () => {
     await signOut(auth);
+    setFavorites([]); // Очищаємо улюблені викладачі при виході
+    setUser(null); // Очищаємо стан користувача
   };
 
   // Функція для реєстрації
@@ -47,6 +55,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
     register,
+    favorites,
+    setFavorites, // Додаємо функцію для зміни favorites
   };
 
   // Рендеримо провайдер контексту з переданими значеннями

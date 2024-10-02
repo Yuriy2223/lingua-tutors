@@ -4,7 +4,7 @@ import { useAuth } from '../../services/authContext';
 import DefaultReviewerPhoto from '../../assets/imeges/defoltAvatar.webp';
 import { toast } from 'react-toastify';
 import { db } from '../../services/firebase';
-import { collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { ref, set, remove } from 'firebase/database';
 import {
   IconHeart,
   IconsBooks,
@@ -40,6 +40,12 @@ import {
   BookTrialButton,
 } from './TeacherCard.styles';
 
+interface Review {
+  reviewer_name: string;
+  reviewer_rating: number;
+  comment: string;
+}
+
 interface Teacher {
   id: string;
   name: string;
@@ -47,11 +53,7 @@ interface Teacher {
   languages: string[];
   levels: string[];
   rating: number;
-  reviews: {
-    reviewer_name: string;
-    reviewer_rating: number;
-    comment: string;
-  }[];
+  reviews: Review[];
   price_per_hour: number;
   lessons_done: number;
   avatar_url: string;
@@ -63,7 +65,7 @@ interface Teacher {
 interface TeacherCardProps {
   teacher: Teacher;
   levelFilter: string;
-  onToggleFavorite: () => void;
+  onToggleFavorite: (teacherId: string, isFavorite: boolean) => void;
   isFavorite: boolean;
 }
 
@@ -76,7 +78,6 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   const { openModal } = useModal();
   const { user } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
-
   const handleToggleExpand = () => {
     setIsExpanded(prev => !prev);
   };
@@ -92,24 +93,34 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   };
 
   const handleToggleFavorite = async () => {
+    console.log('User status:', user); 
     if (!user) {
-      toast.error('This feature is available only for authenticated users.');
+      toast.info('This functionality is only available to authorized users.');
       return;
     }
 
-    onToggleFavorite();
+    onToggleFavorite(teacher.id, !isFavorite);
 
-    const favoritesRef = collection(db, 'users', user.uid, 'favorites');
-    const teacherDocRef = doc(favoritesRef, teacher.id);
+    const favoritesRef = ref(db, `users/${user.uid}/favorites/${teacher.id}`);
     try {
       if (isFavorite) {
-        await deleteDoc(teacherDocRef);
+        await remove(favoritesRef);
         toast.success(`${teacher.name} removed from favorites.`);
       } else {
-        await setDoc(teacherDocRef, {
+        await set(favoritesRef, {
+          id: teacher.id,
           name: teacher.name,
           surname: teacher.surname,
-          id: teacher.id,
+          languages: teacher.languages,
+          levels: teacher.levels,
+          rating: teacher.rating,
+          reviews: teacher.reviews,
+          price_per_hour: teacher.price_per_hour,
+          lessons_done: teacher.lessons_done,
+          avatar_url: teacher.avatar_url,
+          lesson_info: teacher.lesson_info,
+          conditions: teacher.conditions,
+          experience: teacher.experience,
         });
         toast.success(`${teacher.name} added to favorites.`);
       }
@@ -142,7 +153,12 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
               </InfoItem>
               <InfoItem>
                 <IconsStar width={20} height={20} iconName="star" />
-                <InfoText>Rating: {teacher.rating}</InfoText>
+                <InfoText>
+                  Rating:{' '}
+                  {teacher.rating !== undefined
+                    ? teacher.rating.toFixed(1)
+                    : 'N/A'}
+                </InfoText>
               </InfoItem>
               <InfoItem>
                 <InfoText>
@@ -203,19 +219,23 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
             <div>
               <p>{teacher.experience}</p>
               <ReviewList>
-                {teacher.reviews.map((review, index) => (
-                  <ReviewItem key={index}>
-                    <ReviewerPhoto src={DefaultReviewerPhoto} />
-                    <ReviewerInfo>
-                      <ReviewerName>{review.reviewer_name}</ReviewerName>
-                      <ReviewerRating>
-                        <IconsStar width={20} height={20} iconName="star" />
-                        {review.reviewer_rating}
-                      </ReviewerRating>
-                    </ReviewerInfo>
-                    <ReviewComment>{review.comment}</ReviewComment>
-                  </ReviewItem>
-                ))}
+                {teacher.reviews.length > 0 ? (
+                  teacher.reviews.map((review, index) => (
+                    <ReviewItem key={index}>
+                      <ReviewerPhoto src={DefaultReviewerPhoto} />
+                      <ReviewerInfo>
+                        <ReviewerName>{review.reviewer_name}</ReviewerName>
+                        <ReviewerRating>
+                          <IconsStar width={20} height={20} iconName="star" />
+                          {review.reviewer_rating}
+                        </ReviewerRating>
+                      </ReviewerInfo>
+                      <ReviewComment>{review.comment}</ReviewComment>
+                    </ReviewItem>
+                  ))
+                ) : (
+                  <p>No reviews yet.</p>
+                )}
               </ReviewList>
             </div>
 

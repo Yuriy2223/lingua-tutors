@@ -77,7 +77,9 @@ export const ModalBooking: React.FC<ModalBookingProps> = ({
             will contact you soon.
           </div>
         );
-        onClose();
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } catch (error) {
         toast.error('Booking failed. Please try again.');
         console.error('Booking error:', error);

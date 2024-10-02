@@ -22,7 +22,11 @@ export const ModalLogout: React.FC<ModalLogoutProps> = ({ onClose }) => {
     try {
       await signOut(auth);
       toast.success('Logout successful!');
-      onClose();
+    
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+ 
     } catch (error) {
       toast.error('Logout failed. Please try again.');
       console.error('Logout error:', error);

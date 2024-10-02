@@ -10,18 +10,15 @@ import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../services/authContext';
 import { db } from '../../services/firebase';
-import {
-  collection,
-  getDocs,
-  doc,
-  setDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+import { get, ref, set, remove } from 'firebase/database';
+import { useNavigate } from 'react-router-dom';
 
 export const FavoritesPage: React.FC = () => {
   const { user } = useAuth();
   const isAuthenticated = !!user;
   const [pageIndex, setPageIndex] = useState(0);
+  const [favoriteTeachers, setFavoriteTeachers] = useState<Teacher[]>([]);
+  const navigate = useNavigate();
 
   interface Teacher {
     id: string;
@@ -42,30 +39,49 @@ export const FavoritesPage: React.FC = () => {
     conditions: string[];
     experience: string;
   }
-  const [favoriteTeachers, setFavoriteTeachers] = useState<Teacher[]>([]);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/teachers');
+      return;
+    }
+
     const fetchFavoriteTeachers = async () => {
-      if (isAuthenticated && user) {
-        try {
-          const favoritesRef = collection(db, 'users', user.uid, 'favorites');
-          const snapshot = await getDocs(favoritesRef);
-          const favoritesList = await Promise.all(
-            snapshot.docs.map(async doc => {
-              const teacherDocRef = doc.data();
-              return { id: doc.id, ...teacherDocRef } as Teacher;
-            })
-          );
+      try {
+        const favoritesRef = ref(db, `users/${user.uid}/favorites`);
+        const snapshot = await get(favoritesRef);
+
+        if (snapshot.exists()) {
+          const favoritesList = Object.values(
+            snapshot.val() as { [key: string]: Teacher }
+          ).map(teacher => ({
+            id: teacher.id,
+            name: teacher.name,
+            surname: teacher.surname,
+            languages: teacher.languages,
+            levels: teacher.levels,
+            rating: teacher.rating,
+            reviews: teacher.reviews,
+            price_per_hour: teacher.price_per_hour,
+            lessons_done: teacher.lessons_done,
+            avatar_url: teacher.avatar_url,
+            lesson_info: teacher.lesson_info,
+            conditions: teacher.conditions,
+            experience: teacher.experience,
+          }));
+
           setFavoriteTeachers(favoritesList);
-        } catch (error) {
-          console.error('Error fetching favorite teachers:', error);
-          toast.error('Failed to load favorite teachers.');
+        } else {
+          console.log('No favorite teachers found.');
         }
+      } catch (error) {
+        console.error('Error fetching favorite teachers:', error);
+        toast.error('Failed to load favorite teachers.');
       }
     };
 
     fetchFavoriteTeachers();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, navigate]);
 
   const handleToggleFavorite = async (teacherId: string) => {
     if (!isAuthenticated) {
@@ -77,19 +93,17 @@ export const FavoritesPage: React.FC = () => {
       teacher => teacher.id !== teacherId
     );
 
-    setFavoriteTeachers(updatedFavorites);
-
     try {
-      const favoritesRef = collection(db, 'users', user!.uid, 'favorites');
-      const teacherDocRef = doc(favoritesRef, teacherId);
-
+      const favoritesRef = ref(db, `users/${user!.uid}/favorites/${teacherId}`);
       if (updatedFavorites.length < favoriteTeachers.length) {
-        await deleteDoc(teacherDocRef);
+        await remove(favoritesRef);
         toast.success(`Teacher removed from favorites.`);
       } else {
-        await setDoc(teacherDocRef, { id: teacherId });
+        await set(favoritesRef, { id: teacherId });
         toast.success(`Teacher added to favorites.`);
       }
+
+      setFavoriteTeachers(updatedFavorites);
     } catch (error) {
       toast.error('Error occurred while updating favorites.');
       console.error('Error updating favorite:', error);
@@ -104,33 +118,31 @@ export const FavoritesPage: React.FC = () => {
   const visibleTeachers = favoriteTeachers.slice(startIndex, startIndex + 4);
 
   return (
-    <div>
-      <TeachersPageContainer>
-        <TeachersList>
-          {visibleTeachers.length > 0 ? (
-            visibleTeachers.map(teacher => (
-              <li key={teacher.id}>
-                <TeacherCard
-                  teacher={teacher}
-                  levelFilter=""
-                  onToggleFavorite={() => handleToggleFavorite(teacher.id)}
-                  isFavorite={true} 
-                />
-              </li>
-            ))
-          ) : (
-            <NoTeachersMessage>
-              Your favorite teachers were not found. Try adding ;).
-            </NoTeachersMessage>
-          )}
-        </TeachersList>
-
-        {startIndex + 4 < favoriteTeachers.length && (
-          <LoadMoreButtonContainer>
-            <LoadMoreButton onClick={handleLoadMore}>Load more</LoadMoreButton>
-          </LoadMoreButtonContainer>
+    <TeachersPageContainer>
+      <TeachersList>
+        {visibleTeachers.length > 0 ? (
+          visibleTeachers.map(teacher => (
+            <li key={teacher.id}>
+              <TeacherCard
+                teacher={teacher}
+                levelFilter=""
+                onToggleFavorite={() => handleToggleFavorite(teacher.id)}
+                isFavorite={true}
+              />
+            </li>
+          ))
+        ) : (
+          <NoTeachersMessage>
+            Your favorite teachers were not found. Try adding ;).
+          </NoTeachersMessage>
         )}
-      </TeachersPageContainer>
-    </div>
+      </TeachersList>
+
+      {startIndex + 4 < favoriteTeachers.length && (
+        <LoadMoreButtonContainer>
+          <LoadMoreButton onClick={handleLoadMore}>Load more</LoadMoreButton>
+        </LoadMoreButtonContainer>
+      )}
+    </TeachersPageContainer>
   );
 };

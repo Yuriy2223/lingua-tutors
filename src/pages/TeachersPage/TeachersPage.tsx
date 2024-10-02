@@ -10,108 +10,73 @@ import {
   TeachersPageContainer,
   NoTeachersMessage,
 } from './TeachersPage.styled';
-// import { teachersData } from '../../components/TeacherCard/teachersData';
 import { TeacherCard } from '../../components/TeacherCard/TeacherCard';
-import { toast } from 'react-toastify';
-import { useAuth } from '../../services/authContext';
 import { db } from '../../services/firebase';
-import { doc, setDoc } from 'firebase/firestore';
-import { collection, getDocs } from 'firebase/firestore'; //** */
+import { ref, get } from 'firebase/database';
+import { useAuth } from '../../services/authContext';
+
+interface Review {
+  reviewer_name: string;
+  reviewer_rating: number;
+  comment: string;
+}
+
+interface Teacher {
+  id: string;
+  name: string;
+  surname: string;
+  languages: string[];
+  levels: string[];
+  rating: number;
+  reviews: Review[];
+  price_per_hour: number;
+  lessons_done: number;
+  avatar_url: string;
+  lesson_info: string;
+  conditions: string[];
+  experience: string;
+}
 
 export const TeachersPage: React.FC = () => {
   const { user } = useAuth();
-  const [languageFilter, setLanguageFilter] = useState('');
-  const [levelFilter, setLevelFilter] = useState('');
-  const [priceFilter, setPriceFilter] = useState('');
-  const [pageIndex, setPageIndex] = useState(0);
-
-  interface Teacher {
-    id: string;
-    name: string;
-    surname: string;
-    languages: string[];
-    levels: string[];
-    rating: number;
-    reviews: {
-      reviewer_name: string;
-      reviewer_rating: number;
-      comment: string;
-    }[];
-    price_per_hour: number;
-    lessons_done: number;
-    avatar_url: string;
-    lesson_info: string;
-    conditions: string[];
-    experience: string;
-  }
-
+  const [languageFilter, setLanguageFilter] = useState<string>('');
+  const [levelFilter, setLevelFilter] = useState<string>('');
+  const [priceFilter, setPriceFilter] = useState<string>('');
+  const [pageIndex, setPageIndex] = useState<number>(0);
   const [teachersData, setTeachersData] = useState<Teacher[]>([]);
-
-  const [favoriteTeachers, setFavoriteTeachers] = useState<string[]>(() => {
-    const savedFavorites = localStorage.getItem('favoriteTeachers');
-    return savedFavorites ? JSON.parse(savedFavorites) : [];
-  });
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchTeachers = async () => {
-      try {
-        const teachersCollection = collection(db, 'teachers');
-        const teacherSnapshot = await getDocs(teachersCollection);
-        const teachersList = teacherSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Teacher, 'id'>),
-        })) as Teacher[];
-        setTeachersData(teachersList);
-      } catch (error) {
-        console.error('Error fetching teachers: ', error);
-        toast.error('Error fetching teachers.');
+      const teachersRef = ref(db, 'teachers');
+      const snapshot = await get(teachersRef);
+      const data = snapshot.val();
+      const teachersList: Teacher[] = data ? Object.values(data) : [];
+      setTeachersData(teachersList);
+    };
+
+    const fetchFavorites = async () => {
+      if (user) {
+        const favoritesRef = ref(db, `users/${user.uid}/favorites`);
+        const snapshot = await get(favoritesRef);
+        const data = snapshot.val();
+        setFavorites(data ? Object.keys(data) : []);
       }
     };
 
     fetchTeachers();
-  }, []);
+    fetchFavorites();
+  }, [user]);
 
   const filteredTeachers = teachersData.filter(teacher => {
     const languageMatch =
       !languageFilter || teacher.languages.includes(languageFilter);
     const levelMatch = !levelFilter || teacher.levels.includes(levelFilter);
     const priceMatch =
-      !priceFilter ||
-      (teacher.price_per_hour >= Number(priceFilter) - 5 &&
-        teacher.price_per_hour <= Number(priceFilter) + 5);
+      !priceFilter || teacher.price_per_hour === Number(priceFilter);
 
     return languageMatch && levelMatch && priceMatch;
   });
-
-  const handleToggleFavorite = async (teacherName: string) => {
-    if (!user) {
-      toast.info('This functionality is only available to authorized users.');
-      return;
-    }
-
-    setFavoriteTeachers(prev => {
-      const isFavorite = prev.includes(teacherName);
-      const updatedFavorites = isFavorite
-        ? prev.filter(name => name !== teacherName)
-        : [...prev, teacherName];
-
-      if (user) {
-        const favoritesRef = doc(db, 'users', user.uid);
-        setDoc(favoritesRef, { favorites: updatedFavorites }, { merge: true })
-          .then(() => {
-            toast.success(
-              `Успішно ${isFavorite ? 'вилучено' : 'додано'} з улюблених!`
-            );
-          })
-          .catch(error => {
-            console.error('Error updating favorites: ', error);
-            toast.error('Виникла помилка при збереженні.');
-          });
-      }
-
-      return updatedFavorites;
-    });
-  };
 
   const handleLoadMore = () => {
     setPageIndex(prevIndex => prevIndex + 1);
@@ -119,6 +84,14 @@ export const TeachersPage: React.FC = () => {
 
   const startIndex = pageIndex * 4;
   const visibleTeachers = filteredTeachers.slice(startIndex, startIndex + 4);
+
+  const handleToggleFavorite = (teacherId: string, isFavorite: boolean) => {
+    if (isFavorite) {
+      setFavorites(prev => prev.filter(id => id !== teacherId));
+    } else {
+      setFavorites(prev => [...prev, teacherId]);
+    }
+  };
 
   return (
     <TeachersPageContainer>
@@ -179,16 +152,21 @@ export const TeachersPage: React.FC = () => {
 
       <TeachersList>
         {visibleTeachers.length > 0 ? (
-          visibleTeachers.map(teacher => (
-            <li key={`${teacher.name}-${teacher.surname}`}>
-              <TeacherCard
-                teacher={teacher}
-                levelFilter={levelFilter}
-                onToggleFavorite={() => handleToggleFavorite(teacher.name)}
-                isFavorite={favoriteTeachers.includes(teacher.name)}
-              />
-            </li>
-          ))
+          visibleTeachers.map(teacher => {
+            const isFavorite = favorites.includes(teacher.id);
+            return (
+              <li key={teacher.id}>
+                <TeacherCard
+                  teacher={teacher}
+                  levelFilter={levelFilter}
+                  onToggleFavorite={() =>
+                    handleToggleFavorite(teacher.id, isFavorite)
+                  }
+                  isFavorite={isFavorite}
+                />
+              </li>
+            );
+          })
         ) : (
           <NoTeachersMessage>
             No teachers found matching your filters.

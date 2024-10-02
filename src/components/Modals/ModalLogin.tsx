@@ -47,7 +47,10 @@ export const ModalLogin: React.FC<ModalLoginProps> = ({ onClose }) => {
         await signInWithEmailAndPassword(auth, data.email, data.password);
         reset();
         toast.success('Login successful!');
-        onClose();
+
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } catch (error) {
         toast.error('Login failed. Please try again.');
         console.error('Login error:', error);

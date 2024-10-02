@@ -6,7 +6,9 @@ export interface AuthContextProps {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  register: (email: string, password: string) => Promise<void>; 
+  register: (email: string, password: string) => Promise<void>;
+  favorites: string[];
+  setFavorites: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 // Створення контексту для аутентифікації

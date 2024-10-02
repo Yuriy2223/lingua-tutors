@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -9,13 +9,15 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_YOUR_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_YOUR_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_YOUR_APP_ID,
+  databaseURL:
+    'https://lingua-tutors-b3db9-default-rtdb.europe-west1.firebasedatabase.app',
 };
 
 // Ініціалізуємо Firebase
 const app = initializeApp(firebaseConfig);
 
-// Ініціалізуємо Firestore
-export const db = getFirestore(app);
+// Ініціалізуємо Realtime Database
+export const db = getDatabase(app);
 
 // Ініціалізація аутентифікації
 export const auth = getAuth(app);

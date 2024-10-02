@@ -37,7 +37,6 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({
         <ModalLogout
           onClose={closeModal}
           onLogout={() => {
-            // логіку виходу
             closeModal();
           }}
         />
