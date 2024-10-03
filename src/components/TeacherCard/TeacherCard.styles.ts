@@ -22,6 +22,8 @@ export const TeacherImgWrapper = styled.div`
   position: relative;
 `;
 export const TeacherImgIcon = styled(Iconsvg)`
+  width: 12px;
+  height: 12px;
   position: absolute;
   right: 20px;
   top: 15px;
