@@ -132,7 +132,7 @@ export const TeacherCard: React.FC<TeacherCardProps> = ({
   return (
     <TeacherCardContainer>
       <TeacherImgWrapper>
-        <TeacherImgIcon width={12} height={12} iconName="online" />
+        <TeacherImgIcon width={12} height={12} iconName="onlain" />
         <TeacherImg src={teacher.avatar_url || DefaultReviewerPhoto} />
       </TeacherImgWrapper>
 
