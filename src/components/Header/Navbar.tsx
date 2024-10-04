@@ -5,10 +5,18 @@ import { useAuth } from '../../services/authContext';
 
 const NavbarContainer = styled.nav`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   gap: 28px;
   padding: 4px 0;
+
+  @media (min-width: 900px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    padding: 4px 0;
+  }
 `;
 
 const NavbarLink = styled(NavLink)`
@@ -33,14 +41,26 @@ const NavbarLink = styled(NavLink)`
   }
 `;
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onClick?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onClick }) => {
   const { user } = useAuth();
 
   return (
     <NavbarContainer>
-      <NavbarLink to="/">Home</NavbarLink>
-      <NavbarLink to="/teachers">Teachers</NavbarLink>
-      {user && <NavbarLink to="/favorites">Favorites</NavbarLink>}{' '}
+      <NavbarLink to="/" onClick={onClick}>
+        Home
+      </NavbarLink>
+      <NavbarLink to="/teachers" onClick={onClick}>
+        Teachers
+      </NavbarLink>
+      {user && (
+        <NavbarLink to="/favorites" onClick={onClick}>
+          Favorites
+        </NavbarLink>
+      )}
     </NavbarContainer>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Image from '../../assets/imeges/sticker.png';
+import Image from '../../assets/imeges/bac.webp';
 import {
   HomePageContainer,
   HomePageMain,
@@ -38,11 +38,13 @@ export const HomePage: React.FC = () => {
           <SubText>
             Embark on an Exciting Language Journey with Expert Language Tutors:
             Elevate your language proficiency to new heights by connecting with
-            highly qualified and experienced tutors
+            highly qualified and experienced tutors.
           </SubText>
-          <HomePageButton type="button" onClick={handleButtonClick}>
-            Get started
-          </HomePageButton>
+          <div>
+            <HomePageButton type="button" onClick={handleButtonClick}>
+              Get started
+            </HomePageButton>
+          </div>
         </HomeLanguage>
         <HomeTutors>
           <HomePageImg src={Image} alt="Language tutors" />

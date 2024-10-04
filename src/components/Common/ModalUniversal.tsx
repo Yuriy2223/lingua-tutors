@@ -14,6 +14,7 @@ const ModalBackdrop = styled.div`
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease;
+  z-index: 5;
 
   @keyframes fadeIn {
     from {

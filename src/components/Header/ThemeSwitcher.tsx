@@ -5,8 +5,12 @@ import { ThemeType } from '../../styles/Theme.ts';
 const SwitcherContainer = styled.div`
   display: flex;
   align-items: center;
-`;
 
+  @media (min-width: 900px) {
+    display: flex;
+    align-items: center;
+  }
+`;
 const Select = styled.select`
   padding: 4px;
   font-size: 16px;
@@ -18,7 +22,6 @@ const Select = styled.select`
   transition: all 300ms ease-in-out;
   outline: none;
 `;
-
 interface ThemeSwitcherProps {
   toggleTheme: (theme: ThemeType) => void;
 }
