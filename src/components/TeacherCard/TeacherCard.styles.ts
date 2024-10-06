@@ -4,22 +4,39 @@ import { Iconsvg } from '../Common/Icons';
 export const TeacherCardContainer = styled.div`
   border-radius: 24px;
   padding: 24px;
-  width: 1184px;
+  max-width: 1184px;
+  width: 100%;
   background: #fff;
   display: flex;
   justify-content: space-between;
   background: #f8f8f8;
+
+  @media (max-width: 1440px) {
+    padding: 10px;
+    margin: 0 auto;
+  }
 `;
 export const TeacherImgWrapper = styled.div`
-  border: 3px solid ${({ theme }) => theme.primaryColorDark};
-  border-radius: 100px;
-  width: 120px;
-  height: 120px;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  padding: 0 10px;
+
+  div {
+    border: 3px solid ${({ theme }) => theme.primaryColorDark};
+    border-radius: 100px;
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  img {
+    border-radius: 100px;
+    width: 96px;
+    height: 96px;
+  }
 `;
 export const TeacherImgIcon = styled(Iconsvg)`
   width: 12px;
@@ -28,26 +45,28 @@ export const TeacherImgIcon = styled(Iconsvg)`
   right: 20px;
   top: 15px;
 `;
-export const TeacherImg = styled.img`
-  border-radius: 100px;
-  width: 96px;
-  height: 96px;
+export const TeacherDetailsContainer = styled.div`
+  max-width: 968px;
+  width: 100%;
 `;
-export const TeacherDetails = styled.div`
-  width: 968px;
-`;
-export const TeacherHeader = styled.div`
+export const DetailsHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
-`;
-export const Languages = styled.p`
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #8a8a89;
-  margin: 0;
+  flex-wrap: wrap; 
+
+  P {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #8a8a89;
+    margin: 0;
+
+    @media (max-width: 374px) {
+    display: none;
+  }
+  }
 `;
 export const InfoWrapper = styled.div`
   display: flex;
@@ -56,17 +75,27 @@ export const InfoWrapper = styled.div`
 export const InfoWrapperUl = styled.ul`
   display: flex;
   align-items: center;
-`;
-export const InfoItem = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 16px;
-  border-right: 1px solid rgba(18, 20, 23, 0.2);
-  padding: 0 16px;
+  flex-wrap: wrap; 
 
-  &:last-child {
-    border-right: none;
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 16px;
+    border-right: 1px solid rgba(18, 20, 23, 0.2);
+    padding: 0 16px;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  @media (max-width: 1040px) {
+    row-gap: 10px;
+    margin-top: 5px;
+  }
+  @media (max-width: 460px) {
+    display: none;
   }
 `;
 export const IconsBooks = styled(Iconsvg)`
@@ -76,7 +105,7 @@ export const IconsBooks = styled(Iconsvg)`
 export const InfoText = styled.p`
   font-weight: 500;
   font-size: 16px;
-  line-height: 150%;
+  line-height: 1.5;
   color: #121417;
 `;
 export const InfoTextSpan = styled.span`
@@ -87,11 +116,19 @@ export const IconsStar = styled(Iconsvg)`
   stroke: var(--yellow-color);
   fill: var(--yellow-color);
 `;
-export const TeacherHeaderButton = styled.button`
+export const ButtonFavorite = styled.button`
   margin-left: 54px;
   padding: 4px;
   border: none;
   background-color: transparent;
+
+  @media (max-width: 1040px) {
+    margin-left: 10px;
+  }
+
+  @media (max-width: 1439px) {
+    margin-left: 30px;
+  }
 `;
 export const IconHeart = styled(Iconsvg)`
   stroke: black;
@@ -116,28 +153,7 @@ export const TeacherName = styled.h2`
   color: ${({ theme }) => theme.primaryBlack};
   margin-bottom: 32px;
 `;
-export const TeacherInfoUL = styled.ul`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 14px;
-`;
-export const TeacherInfoLI = styled.li`
-  font-family: var(--font-family);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 150%;
-  color: #8a8a89;
-`;
-export const TeacherInfoSpeaks = styled.span`
-  text-decoration: underline;
-  text-decoration-skip-ink: none;
-  color: #121417;
-  margin-left: 5px;
-`;
-export const TeacherInfoSpan = styled.span`
-  color: #121417;
-  margin-left: 5px;
-`;
+
 export const TeacherBtn = styled.button`
   border-radius: 10px;
   padding: 2px 8px;
@@ -153,72 +169,7 @@ export const TeacherBtn = styled.button`
     background-color: ${({ theme }) => theme.primaryColorDark};
   }
 `;
-export const TeacherLanguageLevel = styled.ul`
-  margin-top: 30px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-export const TeacherLevel = styled.li`
-  border-radius: 35px;
-  padding: 8px 12px;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.14;
-  border: 1px solid rgba(18, 20, 23, 0.2);
-  color: ${({ theme }) => theme.primaryBlack};
-  background-color: transparent;
-  transition: all 300ms ease;
 
-  &.active {
-    background-color: ${({ theme }) => theme.primaryColorDark};
-    border-color: ${({ theme }) => theme.primaryColorDark};
-  }
-`;
-export const ReviewList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  margin: 32px 0 0 0;
-  gap: 32px;
-`;
-export const ReviewItem = styled.li`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #e0e0e0;
-`;
-export const ReviewerPhoto = styled.img`
-  width: 48px;
-  height: 48px;
-  border-radius: 100px;
-  object-fit: cover;
-`;
-export const ReviewerInfo = styled.div`
-  margin-left: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-export const ReviewerName = styled.p`
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #8a8a89;
-`;
-export const ReviewerRating = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin: 0;
-`;
-export const ReviewComment = styled.p`
-  margin: 16px 0 0 0;
-  width: 100%;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  color: ${({ theme }) => theme.primaryBlack};
-`;
 export const BookTrialButton = styled.button`
   margin-top: 32px;
   font-weight: 500;

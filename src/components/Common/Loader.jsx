@@ -12,7 +12,7 @@ const LoaderWrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(223, 242, 225, 0.7);
-  z-index: 1009;
+  z-index: 10;
 `;
 
 export const Loader = () => {

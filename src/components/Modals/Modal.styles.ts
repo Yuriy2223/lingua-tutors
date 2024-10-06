@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ModalForm = styled.form`
   padding: 12px 0 32px;
-  width: 438px;
+  max-width: 438px;
   margin: 0 auto;
 `;
 export const ModalTitle = styled.h2`
@@ -117,7 +117,7 @@ export const ModalInputPassword = styled.input`
 `;
 export const ModalFormLogaut = styled.div`
   padding: 12px 0 32px;
-  width: 438px;
+  max-width: 438px;
   margin: 0 auto;
 `;
 export const BookingTeacherWrapper = styled.div`

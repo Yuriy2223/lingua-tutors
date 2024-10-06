@@ -8,7 +8,6 @@ import {
   ModalText,
   ModalTitle,
 } from './Modal.styles';
-
 import { auth } from '../../services/firebase';
 import { signOut } from 'firebase/auth';
 

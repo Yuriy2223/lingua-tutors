@@ -6,10 +6,10 @@ import { AuthButton } from './AuthButton';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { Navbar } from './Navbar';
 
-const MobileMenuContainer = styled.div<{ isOpen: boolean }>`
+const MobileMenuContainer = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
-  right: ${({ isOpen }) => (isOpen ? '0' : '-100%')};
+  right: ${({ $isOpen }) => ($isOpen ? '0' : '-100%')};
   width: 75%;
   height: 100vh;
   background-color: #f8f8f8;
@@ -27,8 +27,8 @@ const MenuWrapper = styled.div`
   align-items: center;
   height: 80%;
 `;
-const Overlay = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+const Overlay = styled.div<{ $isOpen: boolean }>`
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -68,8 +68,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 }) => {
   return (
     <>
-      <Overlay isOpen={isMenuOpen} onClick={closeMenu} />
-      <MobileMenuContainer isOpen={isMenuOpen}>
+      <Overlay $isOpen={isMenuOpen} onClick={closeMenu} />
+      <MobileMenuContainer $isOpen={isMenuOpen}>
         <CloseButton onClick={closeMenu}>
           <CloseIcon width={32} height={32} iconName="close" />
         </CloseButton>

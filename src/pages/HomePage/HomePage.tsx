@@ -6,18 +6,10 @@ import {
   HomePageMain,
   HomeLanguage,
   Title,
-  TitleSpan,
-  SubText,
   HomePageButton,
   HomeTutors,
-  HomePageImg,
-  HomePagePk,
   HomePageIcon,
   HomeFooter,
-  HomeFooterUl,
-  HomeFooterLi,
-  HomeFooterH3,
-  HomeFooterP,
 } from './HomePage.styles';
 
 export const HomePage: React.FC = () => {
@@ -32,14 +24,13 @@ export const HomePage: React.FC = () => {
       <HomePageMain>
         <HomeLanguage>
           <Title>
-            Unlock your potential with the best <TitleSpan>language</TitleSpan>{' '}
-            tutors
+            Unlock your potential with the best <span>language</span> tutors
           </Title>
-          <SubText>
+          <p>
             Embark on an Exciting Language Journey with Expert Language Tutors:
             Elevate your language proficiency to new heights by connecting with
             highly qualified and experienced tutors.
-          </SubText>
+          </p>
           <div>
             <HomePageButton type="button" onClick={handleButtonClick}>
               Get started
@@ -47,32 +38,32 @@ export const HomePage: React.FC = () => {
           </div>
         </HomeLanguage>
         <HomeTutors>
-          <HomePageImg src={Image} alt="Language tutors" />
-          <HomePagePk>
+          <img src={Image} alt="Language tutors" />
+          <div>
             <HomePageIcon width={47} height={57} iconName="apple" />
-          </HomePagePk>
+          </div>
         </HomeTutors>
       </HomePageMain>
 
       <HomeFooter>
-        <HomeFooterUl>
-          <HomeFooterLi>
-            <HomeFooterH3>32,000 +</HomeFooterH3>
-            <HomeFooterP>Experienced tutors</HomeFooterP>
-          </HomeFooterLi>
-          <HomeFooterLi>
-            <HomeFooterH3>300,000 +</HomeFooterH3>
-            <HomeFooterP>5-star tutor reviews</HomeFooterP>
-          </HomeFooterLi>
-          <HomeFooterLi>
-            <HomeFooterH3>120 +</HomeFooterH3>
-            <HomeFooterP>Subjects taught</HomeFooterP>
-          </HomeFooterLi>
-          <HomeFooterLi>
-            <HomeFooterH3>200 +</HomeFooterH3>
-            <HomeFooterP>Tutor nationalities</HomeFooterP>
-          </HomeFooterLi>
-        </HomeFooterUl>
+        <ul>
+          <li>
+            <h4>32,000 +</h4>
+            <p>Experienced tutors</p>
+          </li>
+          <li>
+            <h4>300,000 +</h4>
+            <p>5-star tutor reviews</p>
+          </li>
+          <li>
+            <h4>120 +</h4>
+            <p>Subjects taught</p>
+          </li>
+          <li>
+            <h4>200 +</h4>
+            <p>Tutor nationalities</p>
+          </li>
+        </ul>
       </HomeFooter>
     </HomePageContainer>
   );

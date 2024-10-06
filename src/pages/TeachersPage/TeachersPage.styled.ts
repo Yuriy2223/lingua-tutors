@@ -6,12 +6,24 @@ export const TeachersPageContainer = styled(Container)`
   flex-direction: column;
   padding: 20px 120px 96px;
   gap: 32px;
-  /* background-color: ${({ theme }) => theme.primaryColorDark};  */
+
+  @media (max-width: 1440px) {
+    padding: 20px 20px;
+    gap: 20px;
+  }
+  @media (max-width: 768px) {
+    padding: 20px 10px;
+  }
 `;
 export const FilterContainer = styled.ul`
   display: flex;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap;
+
+  @media (max-width: 520px) {
+    display: none;
+  }
 `;
 export const FilterLi = styled.li`
   display: flex;
@@ -52,9 +64,11 @@ export const TeacherItem = styled.li`
 export const LoadMoreButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: 40px;
 `;
 export const LoadMoreButton = styled.button`
+  white-space: nowrap;
   border-radius: 12px;
   padding: 10px 34px;
   font-weight: 500;
@@ -69,7 +83,6 @@ export const LoadMoreButton = styled.button`
     background-color: ${({ theme }) => theme.primaryColorDark};
   }
 `;
-
 export const NoTeachersMessage = styled.p`
   max-width: 600px;
   font-size: 30px;
@@ -82,5 +95,5 @@ export const NoTeachersMessage = styled.p`
   border-radius: 5px;
   background-color: ${({ theme }) => theme.backgroundColor};
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin: 80px auto
+  margin: 80px auto;
 `;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Logo } from './Logo';
 import { Navbar } from './Navbar';
@@ -64,6 +64,19 @@ export const Header: React.FC<HeaderProps> = ({ toggleTheme }) => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 900 && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMenuOpen]);
 
   return (
     <HeaderContainer>

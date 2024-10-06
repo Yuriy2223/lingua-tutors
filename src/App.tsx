@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { themes, ThemeType } from './styles/Theme.ts';
 import { ModalProvider } from './services/ModalProvder.tsx';
@@ -36,10 +36,23 @@ const FavoritesPage = React.lazy(() =>
 
 export const App: React.FC = () => {
   const [themeType, setThemeType] = useState<ThemeType>('light');
+  const [loading, setLoading] = useState(true);
 
   const toggleTheme = (newTheme: ThemeType) => {
     setThemeType(newTheme);
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setLoading(false);
+    };
+    loadData();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <ThemeProvider theme={themes[themeType]}>
