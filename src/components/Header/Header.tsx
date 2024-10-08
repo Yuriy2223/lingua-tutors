@@ -22,7 +22,6 @@ const HeaderWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
 `;
-
 const MenuButton = styled.button`
   display: block;
   background: transparent;
