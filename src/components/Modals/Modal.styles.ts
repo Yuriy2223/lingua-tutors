@@ -44,7 +44,7 @@ export const ModalInputEmail = styled.input`
   width: 100%;
   height: 54px;
   color: ${({ theme }) => theme.primaryBlack};
-  transition: all 300ms ease-in-out;
+  transition: all 300ms ease;
 
   &:focus {
     border-color: ${({ theme }) => theme.primaryColorDark};
